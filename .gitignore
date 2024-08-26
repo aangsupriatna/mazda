@@ -1,0 +1,67 @@
+# File sistem dan cache
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# File IDE dan editor
+/.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace
+
+# File sistem operasi
+.DS_Store
+Thumbs.db
+
+# File kompilasi dan build
+/public/css
+/public/js
+/public/mix-manifest.json
+
+# File log
+*.log
+
+# File database
+*.sqlite
+*.sqlite3
+
+# File backup
+*.bak
+*.swp
+*~
+
+# File konfigurasi lokal
+.env.local
+.env.*.local
+
+# File cache Composer
+composer.phar
+
+# File cache PHPUnit
+.phpunit.cache
+
+# File cache Laravel
+/bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# File cache Filament
+/storage/filament/*
+!storage/filament/.gitkeep
+
+# File ekspor
+/public/exports/*
+!public/exports/.gitkeep
+
+# File upload
+/public/uploads/*
+!public/uploads/.gitkeep

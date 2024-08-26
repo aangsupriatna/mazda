@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'proyek' => 'Project',
+    'pekerjaan' => 'Tasks',
+    'pengaturan' => 'Settings',
+    'peralatan' => 'Tools',
+    'pengguna' => 'Users',
+    'klasifikasi_proyek' => 'Project Classification',
+    'klien' => 'Clients',
+    'scraper' => 'Scrapers',
+    'keluar' => 'Sign Out',
+    'administrasi' => 'Administration',
+    'akte_perubahan' => 'Change of Ownership',
+    'izin_usaha' => 'Business Permit',
+    'pemilik' => 'Owner',
+    'pengurus' => 'Board of Trustees',
+    'teknis' => 'Technical',
+    'keuangan' => 'Finance',
+    'perpajakan' => 'Taxation',
+    'pajak_bulanan' => 'Monthly Tax',
+    'npwp' => 'NPWP',
+    'pkp' => 'PKP',
+    'spt_tahunan' => 'Annual Tax Return',
+    'tenaga_ahli' => 'Expert',
+    'ppn' => 'PPN',
+    'pph' => 'PPH',
+];

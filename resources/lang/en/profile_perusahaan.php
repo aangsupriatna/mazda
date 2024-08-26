@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'profile_perusahaan' => 'Company Profile',
+    'nama_perusahaan' => 'Company Name',
+    'deskripsi' => 'Description',
+    'alamat' => 'Address',
+    'nomor_telepon' => 'Phone Number',
+    'email' => 'Email',
+    'website' => 'Website',
+    'logo' => 'Logo',
+    'umum' => 'General',
+    'kontak' => 'Contact',
+    'simpan' => 'Save',
+    'saved' => 'Data successfully saved',
+    'npwp' => 'NPWP',
+    'status' => 'Status',
+    'kota' => 'City',
+    'provinsi' => 'Province',
+    'kode_pos' => 'Postal Code',
+    'fax' => 'Fax',
+    'nara_hubung' => 'Contact Person',
+    'handphone' => 'Handphone',
+    'kualifikasi_usaha' => 'Business Qualification',
+    'detail' => 'Company Detail',
+];

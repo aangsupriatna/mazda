@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'pemilik' => 'Pemilik Perusahaan',
+    'tambah_pemilik' => 'Tambah Pemilik',
+    'edit_pemilik' => 'Edit Pemilik',
+    'lihat_pemilik' => 'Lihat Pemilik',
+    'nama' => 'Nama',
+    'jenis_kepemilikan' => 'Jenis Kepemilikan',
+    'kewarganegaraan' => 'Kewarganegaraan',
+    'nik_paspor' => 'NIK/Passport',
+    'saham' => 'Saham',
+    'tipe_saham' => 'Tipe Saham',
+    'npwp' => 'NPWP',
+    'alamat' => 'Alamat',
+    'provinsi' => 'Provinsi',
+    'kabupaten_kota' => 'Kabupaten/Kota',
+    'berhasil_dibuat' => 'berhasil membuat pemilik perusahaan baru',
+    'lampiran' => 'Lampiran',
+    'file_ktp' => 'Lampiran File KTP',
+    'file_npwp' => 'Lampiran File NPWP',
+    'deskripsi' => 'Isi dengan detail pemilik perusahaan',
+    'negara' => 'Negara',
+    'deskripsi_lampiran' => 'Lampirkan File KTP dan NPWP.',
+];

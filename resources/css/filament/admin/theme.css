@@ -1,0 +1,50 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+@import '/vendor/awcodes/filament-curator/resources/css/plugin.css';
+@import '/node_modules/cropperjs/dist/cropper.css';
+
+@config 'tailwind.config.js';
+
+.fi-sidebar-nav {
+    @apply bg-primary-800 dark:bg-inherit;
+}
+
+.fi-sidebar-item:hover .fi-sidebar-item-label, .fi-sidebar-item:hover .fi-sidebar-item-icon {
+    @apply text-primary-800;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-label, .fi-sidebar-item-active .fi-sidebar-item-icon {
+    @apply text-primary-800;
+}
+
+.fi-sidebar-item-label, .fi-sidebar-item-icon {
+    @apply text-primary-100;
+}
+
+.fi-page-sub-navigation-sidebar .fi-sidebar-item-label, .fi-page-sub-navigation-sidebar .fi-sidebar-item-icon {
+    @apply text-primary-700;
+}
+
+.fi-page-sub-navigation-sidebar .fi-sidebar-item-button:hover {
+    @apply bg-gray-100 rounded-lg text-primary-100;
+}
+
+.fi-page-sub-navigation-sidebar .fi-sidebar-item-active .fi-sidebar-item-button {
+    @apply bg-gray-100 rounded-lg text-primary-100;
+}
+
+/* Ubah warna header grup sidebar */
+.fi-sidebar-group-header {
+    @apply text-primary-500;
+}
+
+.fi-sidebar-group-label {
+    @apply text-primary-100;
+}
+
+.fi-sidebar-nav-tenant-menu-ctn {
+    @apply bg-white rounded-lg dark:bg-inherit;
+}
+
+.banner-info {
+    @apply p-4 mt-2 text-sm rounded-lg border text-primary-600 bg-primary-900 border-primary-600 dark:text-white;
+}
