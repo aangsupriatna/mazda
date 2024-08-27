@@ -116,6 +116,7 @@ class PpnResource extends Resource
                             ->schema([
                                 CuratorPicker::make('file_ppn_id')
                                     ->label(__('ppn.file_ppn'))
+                                    ->constrained(true)
                                     ->required(),
                             ]),
                     ]),

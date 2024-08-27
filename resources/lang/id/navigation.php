@@ -25,4 +25,5 @@ return [
     'tenaga_ahli' => 'Tenaga Ahli',
     'ppn' => 'PPN',
     'pph' => 'PPH',
+    'pencadangan_aplikasi' => 'Pencadangan Aplikasi',
 ];

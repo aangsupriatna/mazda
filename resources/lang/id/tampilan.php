@@ -12,4 +12,5 @@ return [
     'saved' => 'Tampilan disimpan',
     'deskripsi_general' => 'Pengaturan tampilan secara umum.',
     'deskripsi_data_presentation' => 'Pengaturan tampilan data',
+    'timezone' => 'Zona Waktu',
 ];

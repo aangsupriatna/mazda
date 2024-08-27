@@ -1,5 +1,7 @@
 <?php
 
+use Awcodes\Curator\PathGenerators\DatePathGenerator;
+
 return [
     'accepted_file_types' => [
         'image/jpeg',
@@ -46,7 +48,7 @@ return [
     'max_size' => 5000,
     'model' => \App\Models\Media::class,
     'min_size' => 0,
-    'path_generator' => null,
+    'path_generator' => DatePathGenerator::class,
     'resources' => [
         'label' => 'Media',
         'plural_label' => 'Media',

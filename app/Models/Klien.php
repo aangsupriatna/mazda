@@ -12,11 +12,16 @@ class Klien extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'perusahaan_id', 'nama', 'alias', 'alamat', 'nomor_telepon', 'logo', 'website' ];
+    protected $fillable = [ 'perusahaan_id', 'nama', 'alias', 'alamat', 'nomor_telepon', 'logo_id', 'website' ];
 
     public function perusahaan(): BelongsTo
     {
         return $this->belongsTo(Perusahaan::class);
+    }
+
+    public function logo(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'logo_id');
     }
 
     public static function boot()

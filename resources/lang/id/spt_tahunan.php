@@ -6,5 +6,6 @@ return [
     'nomor' => 'Nomor',
     'tanggal' => 'Tanggal',
     'lampiran' => 'Lampiran',
+    'lampiran_spt_tahunan' => 'Lampiran SPT Tahunan',
     'buat_spt_tahunan' => 'Buat SPT Tahunan',
 ];

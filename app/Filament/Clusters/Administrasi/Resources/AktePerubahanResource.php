@@ -125,12 +125,14 @@ class AktePerubahanResource extends Resource
                     ->orderColumn('order')
                     ->typeColumn('type')
                     ->typeValue('document')
+                    ->constrained(true)
                     ->required(),
                 CuratorPicker::make('file_pengesahan_id')
                     ->label(__('akte_perubahan.file_pengesahan'))
                     ->orderColumn('order')
                     ->typeColumn('type')
                     ->typeValue('document')
+                    ->constrained(true)
                     ->required(),
             ])
             ->collapsible()

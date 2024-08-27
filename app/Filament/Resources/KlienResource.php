@@ -13,7 +13,9 @@ use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\KlienResource\Pages;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Awcodes\Curator\Components\Tables\CuratorColumn;
 
 class KlienResource extends Resource
 {
@@ -37,33 +39,61 @@ class KlienResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
-                    ->label(__('klien.nama'))
-                    ->unique(Klien::class, 'nama', ignoreRecord: true)
-                    ->required(),
-                Forms\Components\TextInput::make('alias')
-                    ->label(__('klien.alias'))
-                    ->required(),
-                Forms\Components\TextInput::make('nomor_telepon')
-                    ->label(__('klien.nomor_telepon'))
-                    ->tel(),
-                Forms\Components\TextInput::make('website')
-                    ->label(__('klien.website'))
-                    ->nullable(),
-                Forms\Components\Textarea::make('alamat')
-                    ->label(__('klien.alamat'))
-                    ->columnSpanFull()
-                    ->rows(3),
-                Forms\Components\FileUpload::make('logo')
-                    ->label(__('klien.logo'))
-                    ->disk('public')
-                    ->directory('klien')
-                    ->columnSpanFull()
-                    ->imagePreviewHeight('100px')
-                    ->image()
-                    ->imageEditor(),
+                Forms\Components\Group::make([
+                    Forms\Components\TextInput::make('nama')
+                        ->label(__('klien.nama'))
+                        ->unique(Klien::class, 'nama', ignoreRecord: true)
+                        ->required(),
+                    Forms\Components\TextInput::make('alias')
+                        ->label(__('klien.alias'))
+                        ->required(),
+                    Forms\Components\TextInput::make('nomor_telepon')
+                        ->label(__('klien.nomor_telepon'))
+                        ->tel(),
+                    Forms\Components\TextInput::make('website')
+                        ->label(__('klien.website'))
+                        ->nullable(),
+                    Forms\Components\Textarea::make('alamat')
+                        ->label(__('klien.alamat'))
+                        ->columnSpanFull()
+                        ->rows(3),
+                ])
+                    ->columns(2)
+                    ->columnSpan(3),
+                Forms\Components\Group::make([
+                    Forms\Components\Section::make(__('klien.logo'))
+                        ->schema([
+                            CuratorPicker::make('logo_id')
+                                ->label(__('klien.logo'))
+                                ->constrained(true)
+                                ->required(),
+                        ]),
+                ]),
+            ])->columns(4);
 
-            ])->columns(2);
+        // ->schema([
+        //     Forms\Components\TextInput::make('nama')
+        //         ->label(__('klien.nama'))
+        //         ->unique(Klien::class, 'nama', ignoreRecord: true)
+        //         ->required(),
+        //     Forms\Components\TextInput::make('alias')
+        //         ->label(__('klien.alias'))
+        //         ->required(),
+        //     Forms\Components\TextInput::make('nomor_telepon')
+        //         ->label(__('klien.nomor_telepon'))
+        //         ->tel(),
+        //     Forms\Components\TextInput::make('website')
+        //         ->label(__('klien.website'))
+        //         ->nullable(),
+        //     Forms\Components\Textarea::make('alamat')
+        //         ->label(__('klien.alamat'))
+        //         ->columnSpanFull()
+        //         ->rows(3),
+        //     CuratorPicker::make('logo_id')
+        //         ->label(__('klien.logo'))
+        //         ->columnSpanFull(),
+
+        // ])->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -71,7 +101,7 @@ class KlienResource extends Resource
         return $table
             ->striped()
             ->columns([
-                Tables\Columns\ImageColumn::make('logo')
+                CuratorColumn::make('logo_id')
                     ->label(__('klien.logo'))
                     ->toggleable()
                     ->size(25),
@@ -133,8 +163,15 @@ class KlienResource extends Resource
         return $infolist
             ->schema([
                 Infolists\Components\TextEntry::make('nama')
-                    ->prefix(fn(Klien $record): string => $record->logo ? '<img src="' . Storage::url($record->logo) . '" alt="' . $record->nama . '" class="object-contain w-10 h-10">' : '')
-                    ->label(__('klien.nama')),
+                    ->label(__('klien.nama'))
+                    ->formatStateUsing(function ($state, $record) {
+                        $logoUrl = $record->logo ? Storage::disk('public')->url($record->logo->path) : null;
+                        $logoHtml = $logoUrl
+                            ? '<img src="' . $logoUrl . '" alt="Logo" class="inline-block px-2 mr-2 w-12 h-12 rounded-full">'
+                            : '';
+                        return new \Illuminate\Support\HtmlString($logoHtml . e($state));
+                    })
+                    ->html(),
                 Infolists\Components\TextEntry::make('alamat')
                     ->label(__('klien.alamat')),
                 Infolists\Components\TextEntry::make('alias')

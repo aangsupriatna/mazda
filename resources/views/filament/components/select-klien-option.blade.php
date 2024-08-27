@@ -1,6 +1,6 @@
 <div class="flex items-center">
     @if ($klien->logo)
-        <img src="{{ Storage::url($klien->logo) }}" alt="{{ $klien->nama }}" class="mr-2 w-6 h-6 rounded-full">
+        <img src="{{ Storage::url($klien->logo->path) }}" alt="{{ $klien->nama }}" class="mr-2 w-6 h-6 rounded-full">
     @else
         <x-heroicon-o-building-office class="mr-2 w-6 h-6" />
     @endif

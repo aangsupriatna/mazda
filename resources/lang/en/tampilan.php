@@ -12,4 +12,5 @@ return [
     'saved' => 'Appearance saved',
     'deskripsi_general' => 'General settings for the appearance.',
     'deskripsi_data_presentation' => 'Data presentation settings.',
+    'timezone' => 'Timezone',
 ];

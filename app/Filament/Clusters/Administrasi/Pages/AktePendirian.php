@@ -119,6 +119,7 @@ class AktePendirian extends Page
                     ->orderColumn('order')
                     ->typeColumn('type')
                     ->typeValue('document')
+                    ->constrained(true)
                     ->required(),
                 CuratorPicker::make('file_pengesahan_id')
                     ->label(__('akte_pendirian.file_pengesahan'))
@@ -126,6 +127,7 @@ class AktePendirian extends Page
                     ->orderColumn('order')
                     ->typeColumn('type')
                     ->typeValue('document')
+                    ->constrained(true)
                     ->required(),
             ])
             ->collapsible()

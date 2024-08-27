@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Pages\Tenancy\EditTenantProfile;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Awcodes\Curator\PathGenerators\DatePathGenerator;
 
 class EditPerusahaan extends EditTenantProfile
 {
@@ -36,27 +37,30 @@ class EditPerusahaan extends EditTenantProfile
                                 Forms\Components\Section::make()
                                     ->schema([
                                         CuratorPicker::make('logo_id')
-                                            ->label('Choose Logo')
+                                            ->label(__('perusahaan.pilih_logo'))
+                                            ->constrained(true)
                                             ->size('xs'),
                                     ])->columnSpan(4),
                                 Forms\Components\Section::make()
                                     ->schema([
                                         Forms\Components\TextInput::make('name')
+                                            ->label(__('perusahaan.nama'))
                                             ->required(),
                                     ])->columnSpan(8),
                             ])->columns(12),
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('email')
+                                    ->label(__('perusahaan.email'))
                                     ->email()
                                     ->required(),
                                 Forms\Components\TextInput::make('no_telepon')
-                                    ->label('Nomor Telepon')
+                                    ->label(__('perusahaan.nomor_telepon'))
                                     ->tel()
                                     ->required(),
                             ])->columns(),
                         Forms\Components\Textarea::make('alamat')
-                            ->label('Alamat')
+                            ->label(__('perusahaan.alamat'))
                             ->required(),
                     ]),
             ]);

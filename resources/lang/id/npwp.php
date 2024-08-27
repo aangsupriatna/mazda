@@ -6,6 +6,7 @@ return [
     'nama' => 'Nama',
     'tanggal' => 'Tanggal',
     'lampiran' => 'Lampiran',
+    'lampiran_npwp' => 'Lampiran NPWP',
     'simpan' => 'Simpan',
     'konfirmasi_npwp' => 'NPWP berhasil disimpan',
     'deskripsi_npwp' => 'Isi data NPWP Perusahaan di sini.',

@@ -11,9 +11,12 @@ use Filament\Navigation\MenuItem;
 use Awcodes\Curator\CuratorPlugin;
 use Filament\Support\Colors\Color;
 use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Pages\Settings\Backups;
 use Filament\Http\Middleware\Authenticate;
+use Awcodes\FilamentGravatar\GravatarPlugin;
 use App\Http\Middleware\SetCurrentPerusahaan;
 use App\Filament\Pages\Tenancy\EditPerusahaan;
+use Awcodes\FilamentGravatar\GravatarProvider;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Pages\Tenancy\RegisterPerusahaan;
@@ -25,7 +28,11 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -83,13 +90,33 @@ class AdminPanelProvider extends PanelProvider
                     ->defaultListView('list')
                     ->registerNavigation(true)
                     ->navigationCountBadge(),
+                FilamentSpatieLaravelBackupPlugin::make()
+                    ->usingPage(Backups::class),
+                FilamentProgressbarPlugin::make()->color('gray'),
+                GravatarPlugin::make()
+                    ->size(200)
+                    ->rating('pg'),
+                FilamentEditProfilePlugin::make()
+                    ->slug('my-profile')
+                    ->setNavigationGroup('My Profile')
+                    ->setSort(10)
+                    ->shouldRegisterNavigation(true)
+                    ->shouldShowDeleteAccountForm(false)
+                    ->shouldShowBrowserSessionsForm()
+                    ->shouldShowAvatarForm(),
             ])
-            ->profile(EditProfile::class)
             ->theme('filament-panels::theme')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->tenantMiddleware([
                 SetCurrentPerusahaan::class,
                 FilamentDynamicAppearance::class,
-            ], isPersistent: true);
+            ], isPersistent: true)
+            ->defaultAvatarProvider(GravatarProvider::class)
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label(__('user.profile'))
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-o-user'),
+            ]);
     }
 }

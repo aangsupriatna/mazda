@@ -5,6 +5,7 @@ return [
     'nomor' => 'Number',
     'tanggal' => 'Date',
     'lampiran' => 'Attachment',
+    'lampiran_pkp' => 'PKP Attachment',
     'simpan' => 'Save',
     'konfirmasi_pkp' => 'PKP saved successfully',
     'deskripsi_pkp' => 'Fill in PKP Company data here.',

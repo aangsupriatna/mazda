@@ -102,6 +102,7 @@ class IzinUsahaResource extends Resource
                             ->schema([
                                 CuratorPicker::make('file_izin_id')
                                     ->label(__('izin_usaha.file_izin'))
+                                    ->constrained(true)
                                     ->required(),
                             ]),
                     ]),

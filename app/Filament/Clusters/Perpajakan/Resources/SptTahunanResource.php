@@ -72,7 +72,8 @@ class SptTahunanResource extends Resource
                     Forms\Components\Section::make(__('spt_tahunan.lampiran'))
                         ->schema([
                             CuratorPicker::make('file_lampiran_id')
-                                ->label(__('spt_tahunan.lampiran'))
+                                ->label(__('spt_tahunan.lampiran_spt_tahunan'))
+                                ->constrained(true)
                                 ->required(),
                         ]),
                 ]),

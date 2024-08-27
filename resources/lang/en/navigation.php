@@ -25,4 +25,5 @@ return [
     'tenaga_ahli' => 'Expert',
     'ppn' => 'PPN',
     'pph' => 'PPH',
+    'pencadangan_aplikasi' => 'Application Backup',
 ];

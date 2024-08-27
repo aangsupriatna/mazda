@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Proyek extends Model
 {
@@ -16,7 +17,6 @@ class Proyek extends Model
     protected $fillable =[
         'perusahaan_id',
         'klien_id',
-        'klasifikasi_proyek_id',
         'nama',
         'lokasi',
         'nomor_kontrak',
@@ -30,10 +30,12 @@ class Proyek extends Model
         'deskripsi',
         'konsorsium',
         'lampiran',
+        'klasifikasi',
     ];
 
     protected $casts = [
         'lampiran' => 'array',
+        'klasifikasi' => 'array',
     ];
 
     public function perusahaan(): BelongsTo
@@ -44,10 +46,5 @@ class Proyek extends Model
     public function klien(): BelongsTo
     {
         return $this->belongsTo(Klien::class);
-    }
-
-    public function klasifikasi(): BelongsTo
-    {
-        return $this->belongsTo(KlasifikasiProyek::class, 'klasifikasi_proyek_id');
     }
 }

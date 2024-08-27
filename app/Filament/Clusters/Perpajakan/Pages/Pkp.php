@@ -83,7 +83,8 @@ class Pkp extends Page
                     ->collapsible()
                     ->schema([
                         CuratorPicker::make('file_lampiran_id')
-                            ->label(__('pkp.lampiran'))
+                            ->label(__('pkp.lampiran_pkp'))
+                            ->constrained(true)
                             ->required(),
                     ]),
             ]),

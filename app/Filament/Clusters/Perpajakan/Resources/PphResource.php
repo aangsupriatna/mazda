@@ -117,6 +117,7 @@ class PphResource extends Resource
                         ->schema([
                             CuratorPicker::make('file_pph_id')
                                 ->label(__('pph.file_pph'))
+                                ->constrained(true)
                                 ->required(),
                         ]),
                 ])->columnSpan(1),

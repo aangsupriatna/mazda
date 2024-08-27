@@ -7,12 +7,17 @@
     "require": {
         "php": "^8.2",
         "awcodes/filament-curator": "^3.6",
+        "awcodes/filament-gravatar": "^2.0",
+        "aymanalhattami/filament-slim-scrollbar": "^2.0",
         "bezhansalleh/filament-language-switch": "^3.1",
         "bezhansalleh/filament-shield": "^3.2",
         "filament/filament": "^3.2",
+        "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "phpoffice/phpword": "^1.2"
+        "njxqlus/filament-progressbar": "^1.0",
+        "phpoffice/phpword": "^1.2",
+        "shuvroroy/filament-spatie-laravel-backup": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

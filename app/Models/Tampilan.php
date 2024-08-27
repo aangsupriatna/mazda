@@ -20,6 +20,7 @@ class Tampilan extends Model
     protected $fillable = [
         'perusahaan_id',
         'user_id',
+        'timezone',
         'primary_color',
         'font',
         'table_sort_direction',

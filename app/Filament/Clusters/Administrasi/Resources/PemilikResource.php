@@ -5,6 +5,9 @@ namespace App\Filament\Clusters\Administrasi\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Pemilik;
+use App\Models\Regency;
+use App\Models\District;
+use App\Models\Province;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -14,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Clusters\Administrasi\Resources\PemilikResource\Pages;
+use App\Models\Village;
 
 class PemilikResource extends Resource
 {
@@ -107,9 +111,11 @@ class PemilikResource extends Resource
                             ->schema([
                                 CuratorPicker::make('file_ktp_id')
                                     ->label(__('pemilik.file_ktp'))
+                                    ->constrained(true)
                                     ->required(),
                                 CuratorPicker::make('file_npwp_id')
                                     ->label(__('pemilik.file_npwp'))
+                                    ->constrained(true)
                                     ->required(),
                             ]),
                     ]),

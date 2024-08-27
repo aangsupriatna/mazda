@@ -16,12 +16,12 @@ class CustomServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Filament::serving(function () {
-            FilamentView::registerRenderHook(
-                PanelsRenderHook::SIDEBAR_NAV_END,
-                fn (): View => view('filament.components.sidebar-banner'),
-            );
-        });
+        // Filament::serving(function () {
+        //     FilamentView::registerRenderHook(
+        //         PanelsRenderHook::SIDEBAR_NAV_END,
+        //         fn (): View => view('filament.components.sidebar-banner'),
+        //     );
+        // });
 
         // Event::listen(TampilanEvent::class, TampilanListener::class);
     }

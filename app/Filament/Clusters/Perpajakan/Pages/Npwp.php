@@ -89,7 +89,8 @@ class Npwp extends Page
                     ->collapsible()
                     ->schema([
                         CuratorPicker::make('file_lampiran_id')
-                            ->label(__('npwp.lampiran'))
+                            ->label(__('npwp.lampiran_npwp'))
+                            ->constrained(true)
                             ->required(),
                     ]),
             ]),

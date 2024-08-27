@@ -127,9 +127,11 @@ class PengurusResource extends Resource
                             ->schema([
                                 CuratorPicker::make('file_ktp_id')
                                     ->label(__('pengurus.file_ktp'))
+                                    ->constrained(true)
                                     ->required(),
                                 CuratorPicker::make('file_npwp_id')
                                     ->label(__('pengurus.file_npwp'))
+                                    ->constrained(true)
                                     ->required(),
                             ]),
                     ]),

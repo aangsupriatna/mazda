@@ -12,8 +12,8 @@ use Filament\Tables\Table;
 use Filament\Support\RawJs;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use App\Models\KlasifikasiProyek;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -24,7 +24,6 @@ use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Notifications\Actions\Action as NotificationAction;
 use App\Filament\Resources\ProyekResource\Widgets\ProyekStatsOverview;
-use App\Filament\Resources\ProyekResource\RelationManagers\MediasRelationManager;
 
 class ProyekResource extends Resource
 {
@@ -51,7 +50,7 @@ class ProyekResource extends Resource
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getNavigationBadge() > 0 ? 'success' : 'primary';
+        return static::getNavigationBadge() > 0 ? 'primary' : 'gray';
     }
 
     public static function form(Form $form): Form
@@ -95,7 +94,11 @@ class ProyekResource extends Resource
                                     ->columnSpanFull()
                                     ->required()
                                     ->optionsLimit(50)
-                                    ->getOptionLabelFromRecordUsing(fn($record) => view('filament.components.select-klien-option', ['klien' => $record])->render())
+                                    ->getOptionLabelFromRecordUsing(function ($record) {
+                                        return view('filament.components.select-klien-option', [
+                                            'klien' => $record,
+                                        ])->render();
+                                    })
                                     ->allowHtml()
                                     ->createOptionForm([
                                         Forms\Components\Group::make()
@@ -116,15 +119,16 @@ class ProyekResource extends Resource
                                                 Forms\Components\TextInput::make('website')
                                                     ->label(__('klien.website'))
                                                     ->required(),
+                                                Forms\Components\Textarea::make('alamat')
+                                                    ->label(__('klien.alamat'))
+                                                    ->columnSpanFull()
+                                                    ->rows(3)
+                                                    ->required(),
                                             ])->columns(2),
-                                        Forms\Components\TextInput::make('alamat')
-                                            ->label(__('klien.alamat'))
-                                            ->required(),
-                                        Forms\Components\FileUpload::make('logo')
+                                        CuratorPicker::make('logo_id')
                                             ->label(__('klien.logo'))
-                                            ->image()
-                                            ->columnSpanFull()
-                                            ->imageEditor(),
+                                            ->constrained(true)
+                                            ->columnSpanFull(),
                                     ]),
                             ])
                             ->columns(2),
@@ -133,33 +137,14 @@ class ProyekResource extends Resource
                             ->description(__('proyek.deskripsi_kualifikasi'))
                             ->collapsible()
                             ->schema([
-                                Forms\Components\Select::make('klasifikasi_proyek_id')
+                                Forms\Components\TagsInput::make('klasifikasi')
                                     ->label(__('proyek.klasifikasi'))
-                                    ->options(function () {
-                                        return KlasifikasiProyek::orderBy('kode')
-                                            ->get()
-                                            ->mapWithKeys(function ($klasifikasi) {
-                                                return [$klasifikasi->id => "{$klasifikasi->kode} - {$klasifikasi->judul}"];
-                                            });
+                                    ->suggestions(function () {
+                                        $cachedKlasifikasi = Cache::get('proyek_klasifikasi', '');
+                                        return array_map('trim', explode(',', $cachedKlasifikasi));
                                     })
-                                    ->relationship('klasifikasi', 'judul')
-                                    ->preload()
-                                    ->native(false)
-                                    ->required()
-                                    ->searchable()
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('kode')
-                                            ->label(__('proyek.kode'))
-                                            ->required(),
-                                        Forms\Components\Textarea::make('judul')
-                                            ->label(__('proyek.judul'))
-                                            ->rows(5)
-                                            ->nullable(),
-                                    ]),
-                                    // ->createOptionUsing(function (array $data) {
-                                    //     return KlasifikasiProyek::create($data);
-                                    // }),
-
+                                    ->placeholder(__('proyek.bidang_klasifikasi'))
+                                    ->separator(','),
                                 Forms\Components\Textarea::make('ruang_lingkup_pekerjaan')
                                     ->label(__('proyek.ruang_lingkup_pekerjaan'))
                                     ->rows(5)
@@ -250,21 +235,23 @@ class ProyekResource extends Resource
             ->striped()
             ->deferLoading()
             ->columns([
-                Tables\Columns\ImageColumn::make('klien.logo')
+                Tables\Columns\ImageColumn::make('logo')
+                    ->label(__('klien.logo'))
                     ->toggleable()
-                    ->size(25)
+                    ->size(24)
+                    ->defaultImageUrl(function ($record) {
+                        return Storage::url($record->klien->logo?->path);
+                    })
                     ->square(),
                 Tables\Columns\TextColumn::make('nama')
                     ->label(__('proyek.nama'))
                     ->wrap()
-                    ->copyable()
                     ->toggleable()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('lokasi')
                     ->label(__('proyek.lokasi'))
                     ->wrap()
-                    ->copyable()
                     ->toggleable()
                     ->searchable()
                     ->sortable(),
@@ -274,15 +261,28 @@ class ProyekResource extends Resource
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('klasifikasi.kode')
+                Tables\Columns\TextColumn::make('klasifikasi')
                     ->label(__('proyek.klasifikasi'))
-                    ->getStateUsing(fn(Proyek $record): string => "{$record->klasifikasi->kode} - {$record->klasifikasi->judul}")
+                    ->formatStateUsing(function ($state) {
+                        if (is_string($state)) {
+                            $items = array_map('trim', explode(',', $state));
+                        } else {
+                            $items = is_array($state) ? $state : [];
+                        }
+                        return collect($items)
+                            ->filter()
+                            ->map(function ($item) {
+                                return "<span class='inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-gray-800 bg-gray-100 rounded-full border border-gray-200 dark:bg-gray-700 dark:text-white'>{$item}</span>";
+                            })
+                            ->implode(' ');
+                    })
+                    ->html()
                     ->wrap()
                     ->toggleable()
-                    ->searchable(['kode', 'judul'])
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('nilai_kontrak')
                     ->label(__('proyek.nilai_kontrak'))
+                    ->wrapHeader()
                     ->money('IDR', locale: 'id')
                     ->alignEnd()
                     ->searchable()
@@ -290,13 +290,14 @@ class ProyekResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_serah_terima')
                     ->label(__('proyek.tanggal_serah_terima'))
+                    ->wrapHeader()
                     ->date('d M Y')
                     ->alignCenter()
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
             ])
-            ->defaultSort('tanggal_mulai', 'desc')
+            ->defaultSort('tanggal_serah_terima', 'desc')
             ->filters([
                 SelectFilter::make('tanggal_mulai_range')
                     ->label(__('proyek.tanggal_mulai_range'))
@@ -311,6 +312,23 @@ class ProyekResource extends Resource
                         });
                     }),
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('klasifikasi')
+                    ->multiple()
+                    ->options(function () {
+                        $cachedKlasifikasi = Cache::get('proyek_klasifikasi', '');
+                        $klasifikasi = array_map('trim', explode(',', $cachedKlasifikasi));
+                        return array_combine($klasifikasi, $klasifikasi);
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['values'],
+                            fn(Builder $query, $values): Builder => $query->where(function ($query) use ($values) {
+                                foreach ($values as $value) {
+                                    $query->orWhere('klasifikasi', 'like', "%$value%");
+                                }
+                            })
+                        );
+                    })
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -340,11 +358,6 @@ class ProyekResource extends Resource
                 Tables\Grouping\Group::make('kategori_proyek')
                     ->label(__('proyek.kategori_proyek'))
                     ->collapsible(),
-                Tables\Grouping\Group::make('klasifikasi.kode')
-                    ->label(__('proyek.klasifikasi'))
-                    ->titlePrefixedWithLabel(false)
-                    ->getTitleFromRecordUsing(fn(Proyek $record): string => "{$record->klasifikasi->kode} - {$record->klasifikasi->judul}")
-                    ->collapsible(),
                 Tables\Grouping\Group::make('klien.nama')
                     ->label(__('proyek.klien'))
                     ->collapsible(),
@@ -354,7 +367,7 @@ class ProyekResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // MediasRelationManager::class,
+            //
         ];
     }
 
@@ -382,7 +395,8 @@ class ProyekResource extends Resource
                 ])
                 ->native(false),
             CuratorPicker::make('lampiran')
-                ->label(__('proyek.lampiran')),
+                ->label(__('proyek.lampiran'))
+                ->constrained(true),
         ];
     }
 

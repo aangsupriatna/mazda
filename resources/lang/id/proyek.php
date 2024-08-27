@@ -52,4 +52,5 @@ return [
     'deskripsi_lampiran' => 'Upload lampiran proyek, seperti BAST, Kontrak, dan lainnya',
     'deskripsi_kontrak' => 'Lengkapi detail dokumen kontrak',
     'deskripsi_durasi' => 'Isi dengan tanggal mulai, selesai, dan serah terima proyek',
+    'bidang_klasifikasi' => 'Bidang Klasifikasi',
 ];

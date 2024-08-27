@@ -14,6 +14,10 @@ class ViewTenagaAhli extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
+            Actions\CreateAction::make()
+                ->label(__('tenaga_ahli.kembali'))
+                ->color('gray')
+                ->url(TenagaAhliResource::getUrl('index')),
         ];
     }
 }

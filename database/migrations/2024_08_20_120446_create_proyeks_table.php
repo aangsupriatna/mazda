@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Klien;
-use App\Models\Media;
-use App\Models\Proyek;
-use App\Models\KlasifikasiProyek;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -31,8 +28,8 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->boolean('konsorsium')->default(false);
             $table->json('lampiran')->nullable();
+            $table->json('klasifikasi')->nullable();
             $table->foreignIdFor(Klien::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(KlasifikasiProyek::class)->nullable()->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

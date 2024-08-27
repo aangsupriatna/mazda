@@ -88,6 +88,26 @@ class TenagaAhliResource extends Resource
                                         ->maxLength(255),
                                 ])
                                 ->columns(),
+                            Forms\Components\Section::make(__('tenaga_ahli.alamat'))
+                                ->description(__('tenaga_ahli.deskripsi_alamat'))
+                                ->collapsible()
+                                ->schema([
+                                    Forms\Components\Textarea::make('alamat')
+                                        ->label(__('tenaga_ahli.alamat'))
+                                        ->required()
+                                        ->maxLength(255),
+                                    Forms\Components\Group::make([
+                                        Forms\Components\TextInput::make('kabupaten_kota')
+                                            ->label(__('tenaga_ahli.kabupaten_kota'))
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\TextInput::make('provinsi')
+                                            ->label(__('tenaga_ahli.provinsi'))
+                                            ->required()
+                                            ->maxLength(255),
+                                    ])
+                                        ->columns(),
+                                ]),
                             Forms\Components\Section::make(__('tenaga_ahli.detail_tenaga_ahli'))
                                 ->description(__('tenaga_ahli.deskripsi_detail_tenaga_ahli'))
                                 ->collapsible()
@@ -271,23 +291,6 @@ class TenagaAhliResource extends Resource
                                         ->url()
                                         ->maxLength(255),
                                 ]),
-                            Forms\Components\Section::make(__('tenaga_ahli.alamat'))
-                                ->description(__('tenaga_ahli.deskripsi_alamat'))
-                                ->collapsible()
-                                ->schema([
-                                    Forms\Components\Textarea::make('alamat')
-                                        ->label(__('tenaga_ahli.alamat'))
-                                        ->required()
-                                        ->maxLength(255),
-                                    Forms\Components\TextInput::make('provinsi')
-                                        ->label(__('tenaga_ahli.provinsi'))
-                                        ->required()
-                                        ->maxLength(255),
-                                    Forms\Components\TextInput::make('kabupaten_kota')
-                                        ->label(__('tenaga_ahli.kabupaten_kota'))
-                                        ->required()
-                                        ->maxLength(255),
-                                ]),
                         ])->columnSpan(1),
                     ]),
             ]);
@@ -304,27 +307,32 @@ class TenagaAhliResource extends Resource
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('jenis_kelamin')
                     ->label(__('tenaga_ahli.jenis_kelamin'))
+                    ->wrapHeader()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('tanggal_lahir')
                     ->label(__('tenaga_ahli.tanggal_lahir'))
+                    ->wrapHeader()
                     ->date('d M Y')
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('profesi_keahlian')
                     ->label(__('tenaga_ahli.profesi_keahlian'))
+                    ->wrapHeader()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('kewarganegaraan')
                     ->label(__('tenaga_ahli.kewarganegaraan'))
+                    ->wrapHeader()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('lama_pengalaman_kerja')
                     ->label(__('tenaga_ahli.lama_pengalaman_kerja'))
+                    ->wrapHeader()
                     ->badge()
                     ->color('success')
                     ->alignCenter()

@@ -17,7 +17,6 @@ class ViewProyek extends ViewRecord
             Actions\CreateAction::make()
                 ->label(__('proyek.kembali'))
                 ->color('gray')
-                ->icon('heroicon-o-arrow-left')
                 ->url(ProyekResource::getUrl('index')),
         ];
     }

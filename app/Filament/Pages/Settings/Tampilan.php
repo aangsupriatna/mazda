@@ -112,6 +112,15 @@ class Tampilan extends Page
                     )
                     ->default(Font::DEFAULT)
                     ->required(),
+                Forms\Components\Select::make('timezone')
+                    ->label(__('tampilan.timezone'))
+                    ->options(function () {
+                        return collect(timezone_identifiers_list())
+                            ->mapWithKeys(fn ($timezone) => [$timezone => $timezone]);
+                    })
+                    ->searchable()
+                    ->default(config('app.timezone'))
+                    ->required(),
             ])
             ->collapsible()
             ->columns(2);

@@ -44,4 +44,5 @@ return [
     '3_tahun_terakhir' => '3 Years Ago',
     '5_tahun_terakhir' => '5 Years Ago',
     '10_tahun_terakhir' => '10 Years Ago',
+    'bidang_klasifikasi' => 'Classification Field',
 ];

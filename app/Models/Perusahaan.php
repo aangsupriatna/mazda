@@ -91,11 +91,6 @@ class Perusahaan extends Model implements HasAvatar
         return $this->hasMany(Klien::class);
     }
 
-    public function klasifikasiProyeks(): HasMany
-    {
-        return $this->hasMany(KlasifikasiProyek::class);
-    }
-
     public function proyeks(): HasMany
     {
         return $this->hasMany(Proyek::class);
