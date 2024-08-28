@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('tahun_pembuatan');
             $table->string('kepemilikan');
             $table->string('lokasi');
-            $table->string('status')->nullable();
-            $table->string('attachment')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->foreignId('media_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

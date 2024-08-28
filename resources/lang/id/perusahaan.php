@@ -6,4 +6,5 @@ return [
     'email' => 'Email',
     'nomor_telepon' => 'Nomor Telepon',
     'alamat' => 'Alamat',
+    'profile_perusahaan' => 'Profile Perusahaan',
 ];

@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PeralatanResource\Pages;
-use App\Models\Peralatan;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Peralatan;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PeralatanResource\Pages;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Awcodes\Curator\Components\Tables\CuratorColumn;
+use App\Filament\Resources\PeralatanResource\RelationManagers\StatusesRelationManager;
 
 class PeralatanResource extends Resource
 {
@@ -34,110 +37,148 @@ class PeralatanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make(__('peralatan.peralatan'))
-                    ->schema([
-                        Forms\Components\TextInput::make('nama')
-                            ->label(__('peralatan.nama'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('jumlah')
-                            ->label(__('peralatan.jumlah'))
-                            ->integer()
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('kapasitas')
-                            ->label(__('peralatan.kapasitas'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('satuan')
-                            ->label(__('peralatan.satuan'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('merk')
-                            ->label(__('peralatan.merk'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('tahun_pembuatan')
-                            ->label(__('peralatan.tahun_pembuatan'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\Select::make('kondisi')
-                            ->native(false)
-                            ->label(__('peralatan.kondisi'))
-                            ->options([
-                                'Baik' => 'Baik',
-                                'Rusak' => 'Rusak',
-                            ])
-                            ->required(),
-                        Forms\Components\Select::make('kepemilikan')
-                            ->native(false)
-                            ->label(__('peralatan.kepemilikan'))
-                            ->options([
-                                'Milik Sendiri' => 'Milik Sendiri',
-                                'Sewa Jangka Pendek' => 'Sewa Jangka Pendek',
-                                'Sewa Jangka Panjang' => 'Sewa Jangka Panjang',
-                            ])
-                            ->required(),
-                        Forms\Components\TextInput::make('lokasi')
-                            ->label(__('peralatan.lokasi'))
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\Select::make('status')
-                            ->native(false)
-                            ->label(__('peralatan.status'))
-                            ->options([
-                                'Tersedia' => 'Tersedia',
-                                'Dipinjam' => 'Dipinjam',
-                            ])
-                            ->required(),
-                        Forms\Components\FileUpload::make('attachment')
-                            ->label(__('peralatan.attachment'))
-                            ->required()
-                            ->image()
-                            ->imageEditor()
-                            ->disk('public')
-                            ->directory('peralatan')
-                            ->columnSpanFull(),
-                    ])->columns(),
-            ]);
+                Forms\Components\Group::make([
+                    Forms\Components\Section::make(__('peralatan.peralatan'))
+                        ->description(__('peralatan.keterangan_peralatan'))
+                        ->collapsible()
+                        ->schema([
+                            Forms\Components\TextInput::make('nama')
+                                ->label(__('peralatan.nama'))
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpanFull(),
+                            Forms\Components\TextInput::make('jumlah')
+                                ->label(__('peralatan.jumlah'))
+                                ->integer()
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('kapasitas')
+                                ->label(__('peralatan.kapasitas'))
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('satuan')
+                                ->label(__('peralatan.satuan'))
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('merk')
+                                ->label(__('peralatan.merk'))
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('tahun_pembuatan')
+                                ->label(__('peralatan.tahun_pembuatan'))
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('lokasi')
+                                ->label(__('peralatan.lokasi'))
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\Textarea::make('keterangan')
+                                ->label(__('peralatan.keterangan'))
+                                ->nullable()
+                                ->rows(3)
+                                ->maxLength(255)
+                                ->columnSpanFull(),
+                        ])->columns(),
+                ])->columnSpan(2),
+                Forms\Components\Group::make([
+                    Forms\Components\Section::make(__('peralatan.status'))
+                        ->description(__('peralatan.keterangan_status'))
+                        ->collapsible()
+                        ->schema([
+                            Forms\Components\Select::make('kondisi')
+                                ->native(false)
+                                ->label(__('peralatan.kondisi'))
+                                ->options([
+                                    'Baik' => 'Baik',
+                                    'Rusak' => 'Rusak',
+                                ])
+                                ->required(),
+                            Forms\Components\Select::make('kepemilikan')
+                                ->native(false)
+                                ->label(__('peralatan.kepemilikan'))
+                                ->options([
+                                    'Milik Sendiri' => 'Milik Sendiri',
+                                    'Sewa Jangka Pendek' => 'Sewa Jangka Pendek',
+                                    'Sewa Jangka Panjang' => 'Sewa Jangka Panjang',
+                                ])
+                                ->required(),
+                        ]),
+                    Forms\Components\Section::make(__('peralatan.attachment'))
+                        ->description(__('peralatan.keterangan_attachment'))
+                        ->collapsible()
+                        ->schema([
+                            CuratorPicker::make('media_id')
+                                ->label(__('peralatan.attachment'))
+                                ->constrained(true)
+                                ->nullable(),
+                        ]),
+                ])->columnSpan(1),
+
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('attachment')
+                CuratorColumn::make('media_id')
                     ->label(__('peralatan.image'))
-                    ->square()
                     ->size(50),
                 Tables\Columns\TextColumn::make('nama')
                     ->label(__('peralatan.nama'))
-                    ->weight('bold'),
+                    ->weight('bold')
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('jumlah')
                     ->label(__('peralatan.jumlah'))
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('kapasitas')
-                    ->label(__('peralatan.kapasitas')),
+                    ->label(__('peralatan.kapasitas'))
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('satuan')
-                    ->label(__('peralatan.satuan')),
+                    ->label(__('peralatan.satuan'))
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('merk')
-                    ->label(__('peralatan.merk')),
+                    ->label(__('peralatan.merk'))
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('tahun_pembuatan')
                     ->label(__('peralatan.tahun_pembuatan'))
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('kondisi')
                     ->label(__('peralatan.kondisi'))
                     ->alignCenter()
                     ->badge()
                     ->color(fn($state) => $state == 'Baik' ? 'success' : 'danger'),
                 Tables\Columns\TextColumn::make('kepemilikan')
-                    ->label(__('peralatan.kepemilikan')),
+                    ->label(__('peralatan.kepemilikan'))
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('lokasi')
-                    ->label(__('peralatan.lokasi')),
-                Tables\Columns\TextColumn::make('status')
+                    ->label(__('peralatan.lokasi'))
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('statuses.status')
                     ->label(__('peralatan.status'))
                     ->badge()
-                    ->color(fn($state) => $state == 'Tersedia' ? 'success' : 'danger'),
+                    ->color(fn($state) => $state == 'Tersedia' ? 'success' : 'danger')
+                    ->toggleable()
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -163,7 +204,7 @@ class PeralatanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            StatusesRelationManager::class,
         ];
     }
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('tahun');
             $table->string('mata_uang');
             $table->decimal('jumlah', 15, 2);
-            $table->string('lampiran')->nullable();
+            $table->foreignId('media_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

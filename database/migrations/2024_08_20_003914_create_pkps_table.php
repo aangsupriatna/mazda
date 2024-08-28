@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('perusahaan_id')->constrained()->onDelete('cascade');
             $table->string('nomor');
             $table->date('tanggal');
-            $table->foreignId('file_lampiran_id')->constrained('media');
+            $table->foreignId('file_lampiran_id')->nullable()->constrained('media')->nullOnDelete();
             $table->timestamps();
         });
     }

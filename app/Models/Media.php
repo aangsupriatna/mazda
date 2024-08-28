@@ -48,5 +48,13 @@ class Media extends MediaModel
         return $this->belongsTo(Proyek::class);
     }
 
+    public function rekeningKoran(): BelongsTo
+    {
+        return $this->belongsTo(RekeningKoran::class);
+    }
 
+    public function peralatan(): BelongsTo
+    {
+        return $this->belongsTo(Peralatan::class);
+    }
 }

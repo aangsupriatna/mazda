@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('kualifikasi_izin')->nullable();
             $table->date('tanggal_izin');
             $table->date('tanggal_kadaluarsa');
-            $table->foreignId('file_izin_id')->constrained('media')->nullable();
+            $table->foreignId('file_izin_id')->nullable()->constrained('media')->nullOnDelete();
             $table->json('kualifikasi_usaha')->nullable();
             $table->softDeletes();
             $table->timestamps();

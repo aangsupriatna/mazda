@@ -28,7 +28,7 @@ class TampilanListener
             ->title('Tampilan telah disimpan')
             ->icon('heroicon-o-information-circle')
             ->success()
-            ->body('Tampilan ' . $event->tampilan->nama . ' telah berhasil disimpan.')
-            ->sendToDatabase(auth()->user());
+            ->body('Tampilan ' . $event->tampilan->nama . ' telah berhasil disimpan.');
+            // ->sendToDatabase(auth()->user());
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('alias');
             $table->text('alamat');
             $table->string('nomor_telepon')->nullable();
-            $table->foreignId('logo_id')->constrained('media');
+            $table->foreignId('logo_id')->nullable()->constrained('media')->nullOnDelete();
             $table->string('website')->nullable();
             $table->softDeletes();
             $table->timestamps();

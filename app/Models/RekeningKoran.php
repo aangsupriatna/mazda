@@ -20,12 +20,13 @@ class RekeningKoran extends Model
         'tahun',
         'mata_uang',
         'jumlah',
-        'lampiran',
+        'media_id',
     ];
 
-    protected $casts = [
-        'lampiran' => 'array',
-    ];
+    public function media(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'media_id');
+    }
 
     public function perusahaan(): BelongsTo
     {

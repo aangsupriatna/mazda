@@ -29,8 +29,8 @@ return new class extends Migration
             $table->date('menjabat_sampai')->nullable();
             $table->string('status')->nullable();
             $table->boolean('masih_bekerja')->default(true);
-            $table->foreignId('file_ktp_id')->constrained('media')->nullable();
-            $table->foreignId('file_npwp_id')->constrained('media')->nullable();
+            $table->foreignId('file_ktp_id')->nullable()->constrained('media')->nullOnDelete();
+            $table->foreignId('file_npwp_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

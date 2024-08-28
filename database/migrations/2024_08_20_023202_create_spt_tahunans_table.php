@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('tahun');
             $table->string('nomor');
             $table->date('tanggal');
-            $table->foreignId('file_lampiran_id')->constrained('media');
+            $table->foreignId('file_lampiran_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

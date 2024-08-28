@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('nama_notaris');
             $table->string('nomor_pengesahan');
             $table->date('tanggal_pengesahan');
-            $table->foreignId('file_akte_id')->references('id')->on('media')->cascadeOnDelete();
-            $table->foreignId('file_pengesahan_id')->references('id')->on('media')->cascadeOnDelete();
+            $table->foreignId('file_akte_id')->nullable()->constrained('media')->nullOnDelete();
+            $table->foreignId('file_pengesahan_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

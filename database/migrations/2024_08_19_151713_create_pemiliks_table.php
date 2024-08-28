@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('kabupaten_kota');
             $table->string('provinsi');
             $table->string('negara');
-            $table->foreignId('file_ktp_id')->constrained('media')->nullable();
-            $table->foreignId('file_npwp_id')->constrained('media')->nullable();
+            $table->foreignId('file_ktp_id')->nullable()->constrained('media')->nullOnDelete();
+            $table->foreignId('file_npwp_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

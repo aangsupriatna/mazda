@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('bulan');
             $table->string('nomor');
             $table->date('tanggal');
-            $table->foreignId('file_ppn_id')->constrained('media');
+            $table->foreignId('file_ppn_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

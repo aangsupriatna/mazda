@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('alamat')->nullable();
             $table->string('no_telepon')->nullable();
-            $table->foreignId('logo_id')->nullable()->references('id')->on('media')->cascadeOnDelete();
+            $table->foreignId('logo_id')->nullable()->constrained('media')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
