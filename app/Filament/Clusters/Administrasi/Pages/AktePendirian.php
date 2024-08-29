@@ -79,6 +79,7 @@ class AktePendirian extends Page
                     ->required(),
                 DatePicker::make('tanggal')
                     ->label(__('akte_pendirian.tanggal_akte'))
+                    ->displayFormat('d mm Y')
                     ->native(false)
                     ->suffixIcon('heroicon-o-calendar')
                     ->required(),
@@ -101,6 +102,7 @@ class AktePendirian extends Page
                 DatePicker::make('tanggal_pengesahan')
                     ->label(__('akte_pendirian.tanggal_pengesahan'))
                     ->suffixIcon('heroicon-o-calendar')
+                    ->displayFormat('d mm Y')
                     ->native(false)
                     ->required(),
             ])

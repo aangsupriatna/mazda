@@ -114,14 +114,14 @@ class AdminPanelProvider extends PanelProvider
             ], isPersistent: true)
             ->defaultAvatarProvider(GravatarProvider::class)
             ->userMenuItems([
-                MenuItem::make()
-                    ->label(__('perusahaan.profile_perusahaan'))
-                    ->url(fn (): string => EditPerusahaan::getUrl())
-                    ->icon('heroicon-o-building-office'),
-                MenuItem::make()
-                    ->label(__('user.profile'))
-                    ->url(fn (): string => EditProfilePage::getUrl())
-                    ->icon('heroicon-o-user'),
+                // MenuItem::make()
+                //     ->label(__('perusahaan.profile_perusahaan'))
+                //     ->url(fn(): string => EditPerusahaan::getUrl())
+                //     ->icon('heroicon-o-building-office'),
+                // MenuItem::make()
+                //     ->label(__('user.profile'))
+                //     ->url(fn(): string => EditProfilePage::getUrl())
+                //     ->icon('heroicon-o-user'),
             ]);
     }
 }

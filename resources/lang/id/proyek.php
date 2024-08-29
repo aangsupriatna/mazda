@@ -53,4 +53,7 @@ return [
     'deskripsi_kontrak' => 'Lengkapi detail dokumen kontrak',
     'deskripsi_durasi' => 'Isi dengan tanggal mulai, selesai, dan serah terima proyek',
     'bidang_klasifikasi' => 'Bidang Klasifikasi',
+    'berhasil_dibuat' => '**{$nama} telah berhasil dibuat.**',
+    'berhasil_diubah' => '**{$nama} telah berhasil diubah.**',
+    'berhasil_dihapus' => '**{$nama} telah berhasil dihapus.**',
 ];

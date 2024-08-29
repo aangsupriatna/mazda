@@ -8,4 +8,6 @@ return [
     'tambah_user' => 'Tambah User',
     'profile' => 'Profile Saya',
     'avatar' => 'Avatar',
+    'role' => 'Role',
+    'biography' => 'Biografi',
 ];

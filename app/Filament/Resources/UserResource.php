@@ -34,6 +34,16 @@ class UserResource extends Resource
         return __('navigation.pengaturan');
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getNavigationBadge() > 0 ? 'primary' : 'gray';
+    }
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
