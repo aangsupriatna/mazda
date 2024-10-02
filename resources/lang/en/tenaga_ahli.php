@@ -47,4 +47,6 @@ return [
     'kembali' => 'Back',
     'ubah_tenaga_ahli' => 'Edit Expert',
     'tahun' => 'Year',
+    'status_tenaga_ahli' => 'Expert Status',
+    'status' => 'Statuses'
 ];

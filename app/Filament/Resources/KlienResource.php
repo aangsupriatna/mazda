@@ -167,7 +167,7 @@ class KlienResource extends Resource
                     ->formatStateUsing(function ($state, $record) {
                         $logoUrl = $record->logo ? Storage::disk('public')->url($record->logo->path) : null;
                         $logoHtml = $logoUrl
-                            ? '<img src="' . $logoUrl . '" alt="Logo" class="inline-block px-2 mr-2 w-12 h-12 rounded-full">'
+                            ? '<img src="' . $logoUrl . '" alt="Logo" class="inline-block gap-x-2 m-2 w-12 h-12">'
                             : '';
                         return new \Illuminate\Support\HtmlString($logoHtml . e($state));
                     })

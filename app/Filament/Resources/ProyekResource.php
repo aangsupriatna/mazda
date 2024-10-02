@@ -10,10 +10,13 @@ use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Support\RawJs;
+use Filament\Facades\Filament;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -45,7 +48,16 @@ class ProyekResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('created_at', '>=', now()->subDays(7))->count();
+        $user = Auth::user();
+        $perusahaan = Filament::getTenant();
+
+        if ($perusahaan) {
+            return static::getModel()::where('created_at', '>=', now()->subDays(7))
+                ->where('perusahaan_id', $perusahaan->id)
+                ->count();
+        }
+
+        return null;
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -57,16 +69,24 @@ class ProyekResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
-                    ->schema([
+                Forms\Components\Tabs::make()
+                    ->tabs([
                         // Detail Proyek
-                        Forms\Components\Section::make(__('proyek.detail'))
-                            ->description(__('proyek.deskripsi_detail'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('proyek.detail'))
+                            ->icon('heroicon-o-magnifying-glass-circle')
                             ->schema([
                                 Forms\Components\TextInput::make('nama')
                                     ->label(__('proyek.nama'))
                                     ->columnSpanFull()
+                                    ->required(),
+                                Forms\Components\TextInput::make('nomor_kontrak')
+                                    ->label(__('proyek.nomor_kontrak'))
+                                    ->required(),
+                                Forms\Components\TextInput::make('nilai_kontrak')
+                                    ->label(__('proyek.nilai_kontrak'))
+                                    ->prefix('Rp. ')
+                                    ->mask(RawJs::make('$money($input)', ['money' => 'formatMoney']))
+                                    ->stripCharacters(',')
                                     ->required(),
                                 Forms\Components\Select::make('kategori_proyek')
                                     ->label(__('proyek.kategori_proyek'))
@@ -132,10 +152,29 @@ class ProyekResource extends Resource
                                     ]),
                             ])
                             ->columns(2),
+                        Forms\Components\Tabs\Tab::make(__('proyek.durasi_proyek'))
+                            ->icon('heroicon-o-calendar-days')
+                            ->schema([
+                                Forms\Components\DatePicker::make('tanggal_mulai')
+                                    ->label(__('proyek.tanggal_mulai'))
+                                    ->suffixIcon('heroicon-o-calendar')
+                                    ->native(false)
+                                    ->required(),
+                                Forms\Components\DatePicker::make('tanggal_selesai')
+                                    ->label(__('proyek.tanggal_selesai'))
+                                    ->suffixIcon('heroicon-o-calendar')
+                                    ->native(false)
+                                    ->required(),
+                                Forms\Components\DatePicker::make('tanggal_serah_terima')
+                                    ->label(__('proyek.tanggal_serah_terima'))
+                                    ->suffixIcon('heroicon-o-calendar')
+                                    ->native(false)
+                                    ->required(),
+                            ])
+                            ->columnSpan(['lg' => 1]),
                         // Kualifikasi Proyek
-                        Forms\Components\Section::make(__('proyek.kualifikasi_proyek'))
-                            ->description(__('proyek.deskripsi_kualifikasi'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('proyek.kualifikasi_proyek'))
+                            ->icon('heroicon-o-check-badge')
                             ->schema([
                                 Forms\Components\TagsInput::make('klasifikasi')
                                     ->label(__('proyek.klasifikasi'))
@@ -156,13 +195,13 @@ class ProyekResource extends Resource
                             ]),
 
                         // Lampiran Proyek
-                        Forms\Components\Section::make(__('proyek.lampiran_proyek'))
-                            ->description(__('proyek.deskripsi_lampiran'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('proyek.lampiran_proyek'))
+                            ->icon('heroicon-o-paper-clip')
                             ->schema([
                                 Forms\Components\Repeater::make('lampiran')
                                     ->defaultItems(0)
                                     ->collapsible()
+                                    ->label('')
                                     ->collapsed(fn($state): bool => !empty($state))
                                     ->itemLabel(
                                         fn(array $state): ?string => ($state['nama'] ?? '')
@@ -178,51 +217,21 @@ class ProyekResource extends Resource
                 // Kontrak Proyek
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make(__('proyek.kontrak'))
-                            ->description(__('proyek.deskripsi_kontrak'))
-                            ->collapsible()
-                            ->schema([
-                                Forms\Components\TextInput::make('nomor_kontrak')
-                                    ->label(__('proyek.nomor_kontrak'))
-                                    ->required(),
-                                Forms\Components\TextInput::make('nilai_kontrak')
-                                    ->label(__('proyek.nilai_kontrak'))
-                                    ->prefix('Rp. ')
-                                    ->mask(RawJs::make('$money($input)', ['money' => 'formatMoney']))
-                                    ->stripCharacters(',')
-                                    ->required(),
-                                Forms\Components\Checkbox::make('konsorsium')
-                                    ->label(__('proyek.konsorsium'))
-                                    ->default(false)
-                                    ->columnSpanFull()
-                                    ->inlineLabel(false)
-                                    ->required(),
-                                Forms\Components\TextInput::make('persentase_pekerjaan')
-                                    ->label(__('proyek.persentase_pekerjaan'))
-                                    ->integer()
-                                    ->required(),
-                            ])
-                            ->columnSpan(['lg' => 1]),
                         Forms\Components\Section::make(__('proyek.durasi_proyek'))
                             ->description(__('proyek.deskripsi_durasi'))
                             ->collapsible()
                             ->schema([
-                                Forms\Components\DatePicker::make('tanggal_mulai')
-                                    ->label(__('proyek.tanggal_mulai'))
-                                    ->suffixIcon('heroicon-o-calendar')
-                                    ->native(false)
+                                Forms\Components\TextInput::make('persentase_pekerjaan')
+                                    ->label(__('proyek.persentase_pekerjaan'))
+                                    ->integer()
                                     ->required(),
-                                Forms\Components\DatePicker::make('tanggal_selesai')
-                                    ->label(__('proyek.tanggal_selesai'))
-                                    ->suffixIcon('heroicon-o-calendar')
-                                    ->native(false)
-                                    ->required(),
-                                Forms\Components\DatePicker::make('tanggal_serah_terima')
-                                    ->label(__('proyek.tanggal_serah_terima'))
-                                    ->suffixIcon('heroicon-o-calendar')
-                                    ->native(false)
-                                    ->required(),
-                            ]),
+                                Forms\Components\Toggle::make('konsorsium')
+                                    ->label(__('proyek.konsorsium'))
+                                    ->default(false)
+                                    ->columnSpanFull()
+                                    ->inlineLabel(false),
+                            ])
+                            ->columnSpan(['lg' => 1]),
                     ]),
 
             ])
@@ -261,22 +270,27 @@ class ProyekResource extends Resource
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('klasifikasi')
-                    ->label(__('proyek.klasifikasi'))
-                    ->formatStateUsing(function ($state) {
-                        if (is_string($state)) {
-                            $items = array_map('trim', explode(',', $state));
-                        } else {
-                            $items = is_array($state) ? $state : [];
-                        }
-                        return collect($items)
-                            ->filter()
-                            ->map(function ($item) {
-                                return "<span class='inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-gray-800 bg-gray-100 rounded-full border border-gray-200 dark:bg-gray-700 dark:text-white'>{$item}</span>";
-                            })
-                            ->implode(' ');
-                    })
-                    ->html()
+                // Tables\Columns\TextColumn::make('klasifikasi')
+                //     ->label(__('proyek.klasifikasi'))
+                //     ->formatStateUsing(function ($state) {
+                //         if (is_string($state)) {
+                //             $items = array_map('trim', explode(',', $state));
+                //         } else {
+                //             $items = is_array($state) ? $state : [];
+                //         }
+                //         return collect($items)
+                //             ->filter()
+                //             ->map(function ($item) {
+                //                 return "<span class='inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-gray-800 bg-gray-100 rounded-full border border-gray-200 dark:bg-gray-700 dark:text-white'>{$item}</span>";
+                //             })
+                //             ->implode(' ');
+                //     })
+                //     ->html()
+                //     ->wrap()
+                //     ->toggleable()
+                //     ->searchable(),
+                Tables\Columns\TextColumn::make('kategori_proyek')
+                    ->label(__('proyek.kategori_proyek'))
                     ->wrap()
                     ->toggleable()
                     ->searchable(),
@@ -290,7 +304,6 @@ class ProyekResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_serah_terima')
                     ->label(__('proyek.tanggal_serah_terima'))
-                    ->wrapHeader()
                     ->date('d M Y')
                     ->alignCenter()
                     ->searchable()
@@ -561,5 +574,30 @@ class ProyekResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->nama;
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Klien' => $record->klien->nama,
+            'Lokasi' => $record->lokasi,
+            'Kategori Proyek' => $record->kategori_proyek,
+            'Nilai Kontrak' => 'Rp. ' . number_format($record->nilai_kontrak, 0, ',', '.'),
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nama', 'lokasi', 'klien.nama', 'nomor_kontrak', 'kategori_proyek'];
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return static::getUrl('edit', ['record' => $record]);
     }
 }

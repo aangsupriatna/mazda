@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'proyek' => 'Project',
     'nama' => 'Project Name',
     'deskripsi' => 'Project Description',
     'detail' => 'Project Detail',
@@ -45,7 +46,7 @@ return [
     '5_tahun_terakhir' => '5 Years Ago',
     '10_tahun_terakhir' => '10 Years Ago',
     'bidang_klasifikasi' => 'Classification Field',
-    'berhasil_dibuat' => '**{$nama} has been created successfully.**',
-    'berhasil_diubah' => '**{$nama} has been updated successfully.**',
-    'berhasil_dihapus' => '**{$nama} has been deleted successfully.**',
+    'berhasil_dibuat' => ':name has been created successfully.',
+    'berhasil_diubah' => ':name has been updated successfully.',
+    'berhasil_dihapus' => ':name has been deleted successfully.',
 ];

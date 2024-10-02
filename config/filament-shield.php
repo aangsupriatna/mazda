@@ -86,12 +86,4 @@ return [
         'enabled' => true,
     ],
 
-    'nav' => [
-        'group' => 'Teknis',
-        'role' => [
-            'label' => 'Role',
-            'icon' => 'heroicon-o-user-group',
-        ],
-    ],
-
 ];

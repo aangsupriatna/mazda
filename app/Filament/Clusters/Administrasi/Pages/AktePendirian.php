@@ -26,7 +26,7 @@ class AktePendirian extends Page
 
     protected static ?string $model = AktePendirianModel::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
     protected static string $view = 'filament.clusters.administrasi.pages.akte-pendirian';
 
@@ -85,10 +85,11 @@ class AktePendirian extends Page
                     ->required(),
                 TextInput::make('nama_notaris')
                     ->label(__('akte_pendirian.nama_notaris'))
+                    ->columnSpanFull()
                     ->required(),
             ])
             ->collapsible()
-            ->columns(3);
+            ->columns(2);
     }
 
     protected function getAktePengesahanSection(): Component
@@ -120,7 +121,6 @@ class AktePendirian extends Page
                     ->relationship('media', 'id')
                     ->orderColumn('order')
                     ->typeColumn('type')
-                    ->typeValue('document')
                     ->constrained(true)
                     ->required(),
                 CuratorPicker::make('file_pengesahan_id')
@@ -128,7 +128,6 @@ class AktePendirian extends Page
                     ->relationship('media', 'id')
                     ->orderColumn('order')
                     ->typeColumn('type')
-                    ->typeValue('document')
                     ->constrained(true)
                     ->required(),
             ])

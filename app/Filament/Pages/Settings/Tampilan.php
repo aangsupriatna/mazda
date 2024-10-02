@@ -71,8 +71,11 @@ class Tampilan extends Page
     {
         return $form
             ->schema([
-                $this->getGeneralSection(),
-                $this->getDataPresentationSection(),
+                Forms\Components\Tabs::make(__('tampilan.tampilan'))
+                    ->tabs([
+                        $this->getGeneralSection(),
+                        $this->getDataPresentationSection(),
+                    ]),
             ])
             ->model($this->record)
             ->statePath('data')
@@ -81,8 +84,8 @@ class Tampilan extends Page
 
     protected function getGeneralSection(): Component
     {
-        return Section::make(__('tampilan.general'))
-            ->description(__('tampilan.deskripsi_general'))
+        return Forms\Components\Tabs\Tab::make(__('tampilan.general'))
+            ->icon('heroicon-o-photo')
             ->schema([
                 Forms\Components\Select::make('primary_color')
                     ->label(__('tampilan.primary_color'))
@@ -122,14 +125,13 @@ class Tampilan extends Page
                     ->default(config('app.timezone'))
                     ->required(),
             ])
-            ->collapsible()
             ->columns(2);
     }
 
     protected function getDataPresentationSection(): Component
     {
-        return Section::make(__('tampilan.data_presentation'))
-            ->description(__('tampilan.deskripsi_data_presentation'))
+        return Forms\Components\Tabs\Tab::make(__('tampilan.data_presentation'))
+            ->icon('heroicon-o-presentation-chart-bar')
             ->schema([
                 Forms\Components\Select::make('table_sort_direction')
                     ->label(__('tampilan.table_sort_direction'))
@@ -144,7 +146,6 @@ class Tampilan extends Page
                     ->default(RecordsPerPage::DEFAULT)
                     ->required(),
             ])
-            ->collapsible()
             ->columns(2);
     }
 
@@ -155,11 +156,16 @@ class Tampilan extends Page
         $keysToWatch = [
             'primary_color',
             'font',
+            'timezone',
+            'table_sort_direction',
+            'records_per_page',
         ];
 
-        if ($record->isDirty($keysToWatch)) {
-            $this->dispatch('tampilanUpdated');
-        }
+        // if ($record->isDirty($keysToWatch)) {
+            // $this->dispatch('tampilanUpdated');
+        // }
+        // $this->js('window.location.reload()');
+        $this->dispatch('tampilanUpdated');
 
         $record->save();
 

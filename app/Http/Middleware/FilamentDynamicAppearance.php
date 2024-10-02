@@ -36,6 +36,8 @@ class FilamentDynamicAppearance
         $defaultPrimaryColor = $tampilan->primary_color ?? PrimaryColor::from(PrimaryColor::DEFAULT);
         $defaultFont = $tampilan->font->value ?? Font::DEFAULT;
 
+        // dd($defaultPrimaryColor);
+
         FilamentColor::register([
             'primary' => $defaultPrimaryColor->getColor(),
         ]);

@@ -7,32 +7,27 @@ use Filament\Panel;
 use Filament\Widgets;
 use App\Models\Perusahaan;
 use Filament\PanelProvider;
+use Filament\Facades\Filament;
 use Filament\Navigation\MenuItem;
-use Awcodes\Curator\CuratorPlugin;
 use Filament\Support\Colors\Color;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Settings\Backups;
 use Filament\Http\Middleware\Authenticate;
-use Awcodes\FilamentGravatar\GravatarPlugin;
 use App\Http\Middleware\SetCurrentPerusahaan;
 use App\Filament\Pages\Tenancy\EditPerusahaan;
-use Awcodes\FilamentGravatar\GravatarProvider;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Pages\Tenancy\RegisterPerusahaan;
 use App\Http\Middleware\FilamentDynamicAppearance;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
+use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
-use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -80,23 +75,21 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarWidth('320px')
             ->maxContentWidth('full')
             ->plugins([
-                FilamentShieldPlugin::make(),
-                CuratorPlugin::make()
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \Awcodes\Curator\CuratorPlugin::make()
                     ->label('Media')
                     ->pluralLabel('Media')
                     ->navigationIcon('heroicon-o-photo')
                     ->navigationGroup('Content')
                     ->navigationSort(3)
-                    ->defaultListView('list')
                     ->registerNavigation(true)
                     ->navigationCountBadge(),
-                FilamentSpatieLaravelBackupPlugin::make()
+                \ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin::make()
                     ->usingPage(Backups::class),
-                FilamentProgressbarPlugin::make()->color('gray'),
-                GravatarPlugin::make()
+                \Awcodes\FilamentGravatar\GravatarPlugin::make()
                     ->size(200)
                     ->rating('pg'),
-                FilamentEditProfilePlugin::make()
+                \Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
                     ->setIcon('heroicon-o-user')
                     ->setNavigationGroup('My Profile')
@@ -105,6 +98,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowDeleteAccountForm(false)
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(),
+                GlobalSearchModalPlugin::make(),
             ])
             ->theme('filament-panels::theme')
             ->viteTheme('resources/css/filament/admin/theme.css')
@@ -112,16 +106,26 @@ class AdminPanelProvider extends PanelProvider
                 SetCurrentPerusahaan::class,
                 FilamentDynamicAppearance::class,
             ], isPersistent: true)
-            ->defaultAvatarProvider(GravatarProvider::class)
+            ->defaultAvatarProvider(\Awcodes\FilamentGravatar\GravatarProvider::class)
             ->userMenuItems([
-                // MenuItem::make()
-                //     ->label(__('perusahaan.profile_perusahaan'))
-                //     ->url(fn(): string => EditPerusahaan::getUrl())
-                //     ->icon('heroicon-o-building-office'),
-                // MenuItem::make()
-                //     ->label(__('user.profile'))
-                //     ->url(fn(): string => EditProfilePage::getUrl())
-                //     ->icon('heroicon-o-user'),
-            ]);
+                MenuItem::make()
+                    ->label(__('perusahaan.profile_perusahaan'))
+                    ->url(function (): ?string {
+                        $tenant = Filament::getTenant();
+                        return $tenant ? EditPerusahaan::getUrl(['tenant' => $tenant]) : null;
+                    })
+                    ->visible(fn(): bool => Filament::getTenant() !== null)
+                    ->icon('heroicon-o-building-office'),
+                MenuItem::make()
+                    ->label(__('user.profile'))
+                    ->url(function (): ?string {
+                        $tenant = Filament::getTenant();
+                        return $tenant ? EditProfilePage::getUrl(['tenant' => $tenant]) : null;
+                    })
+                    ->visible(fn(): bool => Filament::getTenant() !== null)
+                    ->icon('heroicon-o-user'),
+            ])
+            ->spa()
+            ->globalSearchKeyBindings(['mod+k']);
     }
 }

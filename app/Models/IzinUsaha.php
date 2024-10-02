@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +27,17 @@ class IzinUsaha extends Model
     protected $casts = [
         'kualifikasi_usaha' => 'array',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+
+            $model->perusahaan_id = Filament::getTenant()->id;
+
+        });
+    }
 
     public function perusahaan(): BelongsTo
     {

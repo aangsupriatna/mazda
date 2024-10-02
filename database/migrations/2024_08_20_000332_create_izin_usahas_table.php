@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('tanggal_izin');
             $table->date('tanggal_kadaluarsa');
             $table->foreignId('file_izin_id')->nullable()->constrained('media')->nullOnDelete();
-            $table->json('kualifikasi_usaha')->nullable();
+            $table->text('kualifikasi_usaha')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

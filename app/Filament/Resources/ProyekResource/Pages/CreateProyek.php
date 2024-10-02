@@ -23,10 +23,10 @@ class CreateProyek extends CreateRecord
         $currentUser = Auth::user();
 
         $notif = Notification::make()
-            ->title(__('proyek.proyek'))
+            ->title(__('proyek.proyek_baru'))
             ->icon('heroicon-o-information-circle')
             ->success()
-            ->body($currentUser->name . ' ' . __('proyek.berhasil_dibuat'));
+            ->body(__('proyek.berhasil_dibuat', ['name' => $currentUser->name]));
 
         User::query()->cursor()->each(function ($user) use ($notif) {
             $notif->sendToDatabase($user);

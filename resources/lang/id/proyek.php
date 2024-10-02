@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'proyek' => 'Proyek',
     'nama' => 'Nama Proyek',
     'deskripsi' => 'Deskripsi Proyek',
     'detail' => 'Detail Proyek',
@@ -29,9 +30,10 @@ return [
     'detail_kontrak' => 'Detail Kontrak',
     'lokasi' => 'Lokasi',
     'kontrak' => 'Kontrak',
+    'proyek_baru' => 'Proyek Baru',
     'durasi_proyek' => 'Durasi Proyek',
     'proyek_baru_telah_dibuat' => 'Proyek baru telah dibuat!',
-    'proyek_baru_telah_dibuat_body' => '**{$nama} telah berhasil dibuat.**',
+    'proyek_baru_telah_dibuat_body' => ':name berhasil membuat proyek baru',
     'tambah_proyek' => 'Tambah Proyek',
     'ekspor_proyek' => 'Ekspor Proyek',
     'ubah_proyek' => 'Ubah Proyek',
@@ -53,7 +55,7 @@ return [
     'deskripsi_kontrak' => 'Lengkapi detail dokumen kontrak',
     'deskripsi_durasi' => 'Isi dengan tanggal mulai, selesai, dan serah terima proyek',
     'bidang_klasifikasi' => 'Bidang Klasifikasi',
-    'berhasil_dibuat' => '**{$nama} telah berhasil dibuat.**',
-    'berhasil_diubah' => '**{$nama} telah berhasil diubah.**',
-    'berhasil_dihapus' => '**{$nama} telah berhasil dihapus.**',
+    'berhasil_dibuat' => ':name berhasil membuat proyek baru',
+    'berhasil_diubah' => ':name berhasil mengubah proyek',
+    'berhasil_dihapus' => ':name berhasil menghapus proyek',
 ];

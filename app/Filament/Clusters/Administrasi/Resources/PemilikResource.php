@@ -23,7 +23,7 @@ class PemilikResource extends Resource
 {
     protected static ?string $model = Pemilik::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
     protected static ?string $cluster = Administrasi::class;
 
@@ -43,15 +43,13 @@ class PemilikResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
+                Forms\Components\Tabs::make()
                     ->schema([
-                        Forms\Components\Section::make(__('pemilik.pemilik'))
-                            ->description(__('pemilik.deskripsi'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('pemilik.pemilik'))
+                            ->icon('heroicon-o-identification')
                             ->schema([
                                 Forms\Components\TextInput::make('nama')
                                     ->label(__('pemilik.nama'))
-                                    ->columnSpanFull()
                                     ->required(),
                                 Forms\Components\Select::make('jenis_kepemilikan')
                                     ->label(__('pemilik.jenis_kepemilikan'))
@@ -89,6 +87,10 @@ class PemilikResource extends Resource
                                     ->inline()
                                     ->inlineLabel(false)
                                     ->required(),
+                            ])->columns(),
+                        Forms\Components\Tabs\Tab::make(__('pemilik.alamat'))
+                            ->icon('heroicon-o-map')
+                            ->schema([
                                 Forms\Components\TextInput::make('alamat')
                                     ->label(__('pemilik.alamat'))
                                     ->required(),
@@ -101,7 +103,7 @@ class PemilikResource extends Resource
                                 Forms\Components\TextInput::make('negara')
                                     ->label(__('pemilik.negara'))
                                     ->required(),
-                            ])->columns(),
+                            ])
                     ])->columnSpan(['lg' => 3]),
                 Forms\Components\Group::make()
                     ->schema([

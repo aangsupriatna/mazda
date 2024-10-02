@@ -19,7 +19,7 @@ class IzinUsahaResource extends Resource
 {
     protected static ?string $model = IzinUsaha::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
     protected static ?string $cluster = Administrasi::class;
 
@@ -39,10 +39,10 @@ class IzinUsahaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
-                    ->schema([
-                        Forms\Components\Section::make('Izin Usaha')
-                            ->description(__('izin_usaha.deskripsi_izin_usaha'))
+                Forms\Components\Tabs::make()
+                    ->tabs([
+                        Forms\Components\Tabs\Tab::make('Izin Usaha')
+                            ->icon('heroicon-o-check-circle')
                             ->schema([
                                 Forms\Components\Select::make('jenis_izin')
                                     ->options([
@@ -78,8 +78,9 @@ class IzinUsahaResource extends Resource
                                     ->native(false)
                                     ->required(),
                             ])->columns(),
-                        Forms\Components\Section::make('Kualifikasi Usaha')
-                            ->description(__('izin_usaha.deskripsi_kualifikasi_usaha'))
+                        Forms\Components\Tabs\Tab::make('kualifikasi_usaha')
+                            ->label(__('izin_usaha.kualifikasi_usaha'))
+                            ->icon('heroicon-o-square-2-stack')
                             ->schema([
                                 Forms\Components\Repeater::make('kualifikasi_usaha')
                                     ->label(__('izin_usaha.kualifikasi_usaha'))
@@ -102,8 +103,7 @@ class IzinUsahaResource extends Resource
                             ->schema([
                                 CuratorPicker::make('file_izin_id')
                                     ->label(__('izin_usaha.file_izin'))
-                                    ->constrained(true)
-                                    ->required(),
+                                    ->constrained(true),
                             ]),
                     ]),
             ])

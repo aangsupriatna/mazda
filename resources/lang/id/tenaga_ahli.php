@@ -49,4 +49,6 @@ return [
     'kembali' => 'Kembali',
     'ubah_tenaga_ahli' => 'Ubah Tenaga Ahli',
     'tahun' => 'Tahun',
+    'status_tenaga_ahli' => 'Status Tenaga Ahli',
+    'status' => 'Status'
 ];

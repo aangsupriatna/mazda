@@ -48,8 +48,8 @@ class PphResource extends Resource
                             Forms\Components\Select::make('tahun')
                                 ->label(__('pph.tahun'))
                                 ->options(function () {
-                                    $tahunSekarang = intval(date('Y'));
-                                    $tahunMulai = $tahunSekarang - 10;
+                                    $tahunSekarang = intval(date('Y')) + 5;
+                                    $tahunMulai = $tahunSekarang - 15;
                                     $options = [];
                                     for ($tahun = $tahunSekarang; $tahun >= $tahunMulai; $tahun--) {
                                         $options[$tahun] = $tahun;
@@ -57,7 +57,6 @@ class PphResource extends Resource
                                     return $options;
                                 })
                                 ->default(date('Y'))
-                                ->columnSpanFull()
                                 ->native(false)
                                 ->required()
                                 ->rules([
@@ -109,7 +108,7 @@ class PphResource extends Resource
                                 })
                                 ->native(false)
                                 ->required(),
-                        ]),
+                        ])->columns(),
                 ])->columnSpan(3),
                 Forms\Components\Group::make([
                     Forms\Components\Section::make(__('pph.deskripsi_lampiran'))

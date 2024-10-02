@@ -36,6 +36,7 @@ class Proyek extends Model
     protected $casts = [
         'lampiran' => 'array',
         'klasifikasi' => 'array',
+        'konsorsium' => 'boolean',
     ];
 
     public function perusahaan(): BelongsTo

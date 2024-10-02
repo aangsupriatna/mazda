@@ -50,8 +50,8 @@ class PpnResource extends Resource
                                 Forms\Components\Select::make('tahun')
                                     ->label(__('ppn.tahun'))
                                     ->options(function () {
-                                        $tahunSekarang = intval(date('Y'));
-                                        $tahunMulai = $tahunSekarang - 10;
+                                        $tahunSekarang = intval(date('Y')) + 5;
+                                        $tahunMulai = $tahunSekarang - 15;
                                         $options = [];
                                         for ($tahun = $tahunSekarang; $tahun >= $tahunMulai; $tahun--) {
                                             $options[$tahun] = $tahun;
@@ -59,9 +59,9 @@ class PpnResource extends Resource
                                         return $options;
                                     })
                                     ->default(date('Y'))
-                                    ->columnSpanFull()
                                     ->native(false)
                                     ->required()
+                                    ->searchable()
                                     ->rules([
                                         function (Forms\Get $get) {
                                             return function (string $attribute, $value, Closure $fail) use ($get) {
@@ -106,7 +106,7 @@ class PpnResource extends Resource
                                     ->date('d F Y')
                                     ->native(false)
                                     ->required(),
-                            ]),
+                            ])->columns(),
                     ])
                     ->columnSpan(3),
                 Forms\Components\Group::make()

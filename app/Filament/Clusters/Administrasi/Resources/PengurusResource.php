@@ -18,7 +18,7 @@ class PengurusResource extends Resource
 {
     protected static ?string $model = Pengurus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
     protected static ?string $cluster = Administrasi::class;
 
@@ -38,11 +38,10 @@ class PengurusResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
-                    ->schema([
-                        Forms\Components\Section::make(__('pengurus.identitas'))
-                            ->description(__('pengurus.deskripsi_identitas'))
-                            ->collapsible()
+                Forms\Components\Tabs::make()
+                    ->tabs([
+                        Forms\Components\Tabs\Tab::make(__('pengurus.identitas'))
+                            ->icon('heroicon-o-identification')
                             ->schema([
                                 Forms\Components\TextInput::make('nama')
                                     ->label(__('pengurus.nama'))
@@ -71,9 +70,8 @@ class PengurusResource extends Resource
                                     ->required(),
                             ])->columns(),
 
-                        Forms\Components\Section::make(__('pengurus.detail_kepengurusan'))
-                            ->description(__('pengurus.deskripsi_kepengurusan'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('pengurus.detail_kepengurusan'))
+                            ->icon('heroicon-o-user-group')
                             ->schema([
                                 Forms\Components\Select::make('jenis_kepengurusan')
                                     ->label(__('pengurus.jenis_kepengurusan'))
@@ -102,9 +100,8 @@ class PengurusResource extends Resource
                                     ->required(),
                             ])->columns(),
 
-                        Forms\Components\Section::make(__('pengurus.domisili'))
-                            ->description(__('pengurus.deskripsi_domisili'))
-                            ->collapsible()
+                        Forms\Components\Tabs\Tab::make(__('pengurus.domisili'))
+                            ->icon('heroicon-o-map')
                             ->schema([
                                 Forms\Components\Textarea::make('alamat')
                                     ->rows(3)

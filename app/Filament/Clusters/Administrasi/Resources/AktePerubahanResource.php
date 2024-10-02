@@ -24,7 +24,7 @@ class AktePerubahanResource extends Resource
 {
     protected static ?string $model = AktePerubahan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
     protected static ?string $cluster = Administrasi::class;
 

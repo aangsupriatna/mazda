@@ -93,4 +93,24 @@ class User extends Authenticatable implements HasTenants, HasAvatar
         $this->perusahaan()->updateExistingPivot($perusahaan->id, ['is_current' => true]);
         $this->refresh();
     }
+
+    /**
+     * Memeriksa apakah pengguna adalah super admin.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('super-admin');
+    }
+
+    /**
+     * Memeriksa apakah pengguna adalah admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
 }

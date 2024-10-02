@@ -45,8 +45,8 @@ class SptTahunanResource extends Resource
                     Forms\Components\Select::make('tahun')
                         ->label(__('spt_tahunan.tahun'))
                         ->options(function () {
-                            $tahunSekarang = intval(date('Y'));
-                            $tahunMulai = $tahunSekarang - 10;
+                            $tahunSekarang = intval(date('Y')) + 5;
+                            $tahunMulai = $tahunSekarang - 15;
                             $options = [];
                             for ($tahun = $tahunSekarang; $tahun >= $tahunMulai; $tahun--) {
                                 $options[$tahun] = $tahun;
